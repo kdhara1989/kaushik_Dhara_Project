@@ -47,6 +47,11 @@ public class LogDao {
 	}
 	
 	
+	/**
+	 * Creates connection objects for file based HSQLDB
+	 * 
+	 * @return
+	 */
 	private Connection createConnection() {
 		Connection con = null;
 		try {
@@ -63,6 +68,11 @@ public class LogDao {
 		return con;
 	}
 	
+	/**
+	 * Closing connection
+	 * 
+	 * @param con
+	 */
 	private void closeConnection(Connection con) {
 		try {
 			con.close();
@@ -71,6 +81,12 @@ public class LogDao {
 		}
 	}
 	
+	/**
+	 * Creates table if not exist
+	 * 
+	 * @param con
+	 * @return
+	 */
 	private int createTable(Connection con) {
 		Statement stmt = null;
 		int result = 0;
@@ -85,6 +101,12 @@ public class LogDao {
 	}
 	
 	
+	/**
+	 * Cleans table to get it ready for next load
+	 * 
+	 * @param con
+	 * @return
+	 */
 	private int deleteTable(Connection con) {
 		Statement stmt = null;
 		int result = 0;
@@ -99,6 +121,12 @@ public class LogDao {
 	}
 	
 	
+	/**
+	 * Insert all log records in batch
+	 * 
+	 * @param con
+	 * @param logs
+	 */
 	private void insertLogInfos(Connection con, List<LogBean> logs) {
 		
 		final int batchSize = 500;
@@ -148,7 +176,7 @@ public class LogDao {
 				log.info(" ID | HOST | TYPE | DURATION | ALERT ");
 				try {
 					while (r.next()) {
-						log.info(result.getString(1) + " | "+ result.getString(2) + " | " + result.getString(3) + " | " +  result.getString(4) + " | " +  result.getString(5));
+						log.info(result.getString(1) + " | "+ result.getString(2) + " | " + result.getString(3) + " | " +  result.getLong(4) + " | " +  result.getBoolean(5));
 					}
 				} catch (SQLException e) {
 					log.error(e.getMessage(), e);
