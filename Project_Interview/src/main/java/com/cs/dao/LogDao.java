@@ -38,16 +38,16 @@ public class LogDao {
 	 * @throws SQLException 
 	 * @throws FileNotFoundException 
 	 */
-	public void wirteInDB(List<LogBean> logs) throws ClassNotFoundException, SQLException, FileNotFoundException {
-		
+	public void wirteInDB(List<LogBean> logs) throws FileNotFoundException {
 		DataSource datasource = getDataSource();
 		setJdbcTemplate(new JdbcTemplate(datasource));
-
-		if(createTable(datasource.getConnection()) == 0 ) deleteTable(datasource.getConnection()); 
-
-		insertLogInfos(logs);
-
-		printTable();
+		try (Connection conn = datasource.getConnection()){
+			if(createTable(conn) == 0 ) deleteTable(conn); 
+			insertLogInfos(logs);
+			printTable(); // Optional
+		} catch (SQLException e) {
+			log.error(e.getMessage(), e);
+		} 
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class LogDao {
 		dataSource.setPassword("");
 		return dataSource;
 	}
-
+	
 	/**
 	 * Creates table if not exist
 	 * 

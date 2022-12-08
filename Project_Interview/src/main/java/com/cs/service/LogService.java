@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class LogService {
 			List<LogBean> logInfos = processLogFile(logs);
 			log.debug("Total log entries to persist - " + logInfos.size());
 			dao.wirteInDB(logInfos);
-		} catch (IOException | ClassNotFoundException | SQLException e) {
+		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}
 	}
